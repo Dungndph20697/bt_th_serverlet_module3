@@ -1,8 +1,10 @@
-package com.example.demo.th.quanlyuser.controller;
+package com.example.demo.th.goistoredprocedures.controller;
 
-import com.example.demo.th.quanlyuser.DAO.IUserDAO;
-import com.example.demo.th.quanlyuser.DAO.UserDAO;
-import com.example.demo.th.quanlyuser.model.User;
+
+
+import com.example.demo.th.goistoredprocedures.DAO.IUserDAO;
+import com.example.demo.th.goistoredprocedures.DAO.UserDAO;
+import com.example.demo.th.goistoredprocedures.model.User;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,13 +16,13 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-@WebServlet(name = "UserServlet", urlPatterns = "/users")
+@WebServlet(name = "UserServlet", urlPatterns = "/storedprocedures")
 public class UserServervlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private IUserDAO userDAO;
 
     public void init() {
-//        userDAO = new UserDAO();
+        userDAO = new UserDAO();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -45,42 +47,42 @@ public class UserServervlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        String action = request.getParameter("action");
-//        if (action == null) {
-//            action = "";
-//        }
-//
-//        try {
-//            switch (action) {
-//                case "create":
-//                    showNewForm(request, response);
-//                    break;
-//                case "edit":
-//                    showEditForm(request, response);
-//                    break;
-//                case "delete":
-//                    deleteUser(request, response);
-//                    break;
-//                default:
-//                    listUser(request, response);
-//                    break;
-//            }
-//        } catch (SQLException ex) {
-//            throw new ServletException(ex);
-//        }
+        String action = request.getParameter("action");
+        if (action == null) {
+            action = "";
+        }
+
+        try {
+            switch (action) {
+                case "create":
+                    showNewForm(request, response);
+                    break;
+                case "edit":
+                    showEditForm(request, response);
+                    break;
+                case "delete":
+                    deleteUser(request, response);
+                    break;
+                default:
+                    listUser(request, response);
+                    break;
+            }
+        } catch (SQLException ex) {
+            throw new ServletException(ex);
+        }
     }
 
     private void listUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
         List<User> listUser = userDAO.selectAllUsers();
         request.setAttribute("listUser", listUser);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/quanlyuser/list.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/goistoredprocedures/list.jsp");
         dispatcher.forward(request, response);
     }
 
     private void showNewForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/quanlyuser/create.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/goistoredprocedures/create.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -88,7 +90,7 @@ public class UserServervlet extends HttpServlet {
             throws SQLException, ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         User existingUser = (User) userDAO.selectUser(id);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/quanlyuser/edit.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/goistoredprocedures/edit.jsp");
         request.setAttribute("user", existingUser);
         dispatcher.forward(request, response);
 
@@ -101,7 +103,7 @@ public class UserServervlet extends HttpServlet {
         String country = request.getParameter("country");
         User newUser = User.builder().name(name).email(email).country(country).build();
         userDAO.insertUser(newUser);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/quanlyuser/create.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/goistoredprocedures/create.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -114,7 +116,7 @@ public class UserServervlet extends HttpServlet {
 
         User book = new User(id, name, email, country);
         userDAO.updateUser(book);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/quanlyuser/edit.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/goistoredprocedures/edit.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -125,7 +127,7 @@ public class UserServervlet extends HttpServlet {
 
         List<User> listUser = userDAO.selectAllUsers();
         request.setAttribute("listUser", listUser);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/quanlyuser/list.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/goistoredprocedures/list.jsp");
         dispatcher.forward(request, response);
     }
 }
