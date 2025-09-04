@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface IUserDAOTrancacsion {
     void addUserTransaction(User user, List<Integer> permission);
+
+    public void insertUpdateUseTransaction();
 }

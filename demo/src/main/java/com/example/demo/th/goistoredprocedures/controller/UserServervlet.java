@@ -67,6 +67,12 @@ public class UserServervlet extends HttpServlet {
                 case "delete":
                     deleteUser(request, response);
                     break;
+                case "test-without-tran":
+                    testWithoutTran(request, response);
+                    break;
+                case "test-use-tran":
+                    testUseTran(request, response);
+                    break;
                 default:
                     listUser(request, response);
                     break;
@@ -75,6 +81,12 @@ public class UserServervlet extends HttpServlet {
             throw new ServletException(ex);
         }
     }
+    private void testUseTran(HttpServletRequest request, HttpServletResponse response) {
+
+        userDAOTrancacsion.insertUpdateUseTransaction();
+
+    }
+
 
     private void listUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
@@ -98,6 +110,10 @@ public class UserServervlet extends HttpServlet {
         request.setAttribute("user", existingUser);
         dispatcher.forward(request, response);
 
+    }
+
+    private void testWithoutTran(HttpServletRequest request, HttpServletResponse response) {
+        userDAO.insertUpdateWithoutTransaction();
     }
 
     private void insertUser(HttpServletRequest request, HttpServletResponse response)
