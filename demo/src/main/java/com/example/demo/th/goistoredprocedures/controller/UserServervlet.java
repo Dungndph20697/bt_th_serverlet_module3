@@ -3,6 +3,7 @@ package com.example.demo.th.goistoredprocedures.controller;
 
 
 import com.example.demo.th.goistoredprocedures.DAO.IUserDAO;
+import com.example.demo.th.goistoredprocedures.DAO.IUserDAOTrancacsion;
 import com.example.demo.th.goistoredprocedures.DAO.UserDAO;
 import com.example.demo.th.goistoredprocedures.model.User;
 
@@ -14,15 +15,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "UserServlet", urlPatterns = "/storedprocedures")
 public class UserServervlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private IUserDAO userDAO;
+    private IUserDAOTrancacsion userDAOTrancacsion;
 
     public void init() {
         userDAO = new UserDAO();
+        userDAOTrancacsion = new UserDAO();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -101,8 +105,26 @@ public class UserServervlet extends HttpServlet {
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String country = request.getParameter("country");
+
+        String add = request.getParameter("add");
+        String edit = request.getParameter("edit");
+        String delete = request.getParameter("delete");
+        String view = request.getParameter("view");
+        List<Integer> permissions = new ArrayList<>();
+        if (add != null){
+            permissions.add(1);
+        }
+        if (edit != null){
+            permissions.add(2);
+        }
+        if (delete != null){
+            permissions.add(3);
+        }
+        if (view != null){
+            permissions.add(4);
+        }
         User newUser = User.builder().name(name).email(email).country(country).build();
-        userDAO.insertUser(newUser);
+        userDAOTrancacsion.addUserTransaction(newUser,permissions);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/goistoredprocedures/create.jsp");
         dispatcher.forward(request, response);
     }
